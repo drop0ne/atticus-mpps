@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import mimetypes
 import os
 import shutil
 import time
@@ -8,6 +9,12 @@ from typing import Any
 
 from .hashes import sha256_file
 from .ids import new_packet_id, new_prov_bundle_id, new_trace_id, utc_now_iso
+
+
+def _guess_mime_type(path: Path) -> str:
+    """Return a conservative MIME type for a stored raw asset."""
+    guessed, _ = mimetypes.guess_type(path.name)
+    return guessed or "application/octet-stream"
 
 
 def make_raw_image_packet(
@@ -51,7 +58,7 @@ def make_raw_image_packet(
         "data_ref": {
             "raw_ref": str(dest.as_posix()),
             "raw_sha256": digest,
-            "mime_type": "image/jpeg" if dest.suffix.lower() in {".jpg", ".jpeg"} else "image/png",
+            "mime_type": _guess_mime_type(dest),
             "bytes": os.path.getsize(dest),
         },
         "calibration": {

@@ -12,8 +12,11 @@ from mpps.replay.replay_runner import replay_cloud_candidates
 from mpps.vision.sky_cloud_baseline import make_cloud_fraction_candidate
 
 
-RAW_LOG = Path("data/packet_log/raw_observations.jsonl")
-DERIVED_LOG = Path("data/packet_log/derived_candidates.jsonl")
+DEFAULT_PACKET_DIR = Path("data/packet_log")
+RAW_LOG_NAME = "raw_observations.jsonl"
+DERIVED_LOG_NAME = "derived_candidates.jsonl"
+RAW_LOG = DEFAULT_PACKET_DIR / RAW_LOG_NAME
+DERIVED_LOG = DEFAULT_PACKET_DIR / DERIVED_LOG_NAME
 
 
 def cmd_init(args: argparse.Namespace) -> None:
@@ -49,14 +52,18 @@ def cmd_detect_clouds(args: argparse.Namespace) -> None:
 
 
 def cmd_validate(args: argparse.Namespace) -> None:
+    packet_dir = Path(args.packet_dir)
+    raw_log = packet_dir / RAW_LOG_NAME
+    derived_log = packet_dir / DERIVED_LOG_NAME
+
     failures = 0
-    for packet in read_jsonl(RAW_LOG):
+    for packet in read_jsonl(raw_log):
         errors = validate_packet(packet, "schemas/raw_observation.schema.json")
         if errors:
             failures += 1
             print(f"RAW validation failure {packet.get('packet_id')}: {errors}")
 
-    for packet in read_jsonl(DERIVED_LOG):
+    for packet in read_jsonl(derived_log):
         errors = validate_packet(packet, "schemas/derived_candidate.schema.json")
         if errors:
             failures += 1
@@ -90,7 +97,7 @@ def build_parser() -> argparse.ArgumentParser:
     s.set_defaults(func=cmd_detect_clouds)
 
     s = sub.add_parser("validate")
-    s.add_argument("packet_dir", nargs="?", default="data/packet_log")
+    s.add_argument("packet_dir", nargs="?", default=str(DEFAULT_PACKET_DIR))
     s.set_defaults(func=cmd_validate)
 
     s = sub.add_parser("replay")
