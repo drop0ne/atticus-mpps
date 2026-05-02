@@ -4,6 +4,30 @@ ATTICUS MPPS is a desktop-stage environmental perception prototype.
 
 The v0.1 goal is to prove a replayable, auditable packet spine before outdoor deployment or advanced hardware.
 
+## Current Status
+
+Status: **early scaffold / v0.1 desktop prototype**
+
+Repository focus:
+
+- prove raw image ingest
+- prove packet validation
+- prove SHA-256 lineage
+- prove derived candidate creation
+- prove replay scaffolding
+- preserve governance boundaries before outdoor sensing
+
+Active work is tracked in GitHub issues:
+
+| Issue | Focus |
+|---:|---|
+| #1 | First local smoke test |
+| #2 | Replay comparison report |
+| #3 | Mock weather and timing context packets |
+| #4 | Packet ancestry resolver |
+| #5 | First benchmark dataset layout |
+| #6 | Governance and retention policy |
+
 ## Scope
 
 In scope:
