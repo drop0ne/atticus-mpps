@@ -4,6 +4,12 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 *.pyc
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+
 data/raw_store/*
 data/packet_log/*
 data/replay_runs/*
