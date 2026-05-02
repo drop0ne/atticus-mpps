@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://atticus.local/schemas/raw_observation.v0.1.schema.json",
+  "title": "ATTICUS MPPS Raw Observation Packet v0.1",
+  "type": "object",
+  "required": [
+    "packet_version",
+    "packet_id",
+    "packet_type",
+    "sensor",
+    "time",
+    "data_ref",
+    "calibration",
+    "lineage",
+    "review"
+  ],
+  "properties": {
+    "packet_version": {"const": "mpps.raw.v0.1"},
+    "packet_id": {"type": "string"},
+    "packet_type": {"const": "RAW_OBSERVATION"},
+    "sensor": {
+      "type": "object",
+      "required": ["sensor_id", "sensor_type", "sensor_model", "modality"],
+      "properties": {
+        "sensor_id": {"type": "string"},
+        "sensor_type": {"type": "string"},
+        "sensor_model": {"type": "string"},
+        "modality": {"type": "string"}
+      }
+    },
+    "time": {
+      "type": "object",
+      "required": ["capture_start_utc", "capture_end_utc", "ingest_time_utc", "monotonic_time_ns", "clock_source", "clock_quality"],
+      "properties": {
+        "capture_start_utc": {"type": "string"},
+        "capture_end_utc": {"type": "string"},
+        "ingest_time_utc": {"type": "string"},
+        "monotonic_time_ns": {"type": "integer"},
+        "clock_source": {"type": "string"},
+        "clock_quality": {"type": "string"},
+        "sync_error_estimate_ms": {"type": ["number", "null"]}
+      }
+    },
+    "data_ref": {
+      "type": "object",
+      "required": ["raw_ref", "raw_sha256", "mime_type", "bytes"],
+      "properties": {
+        "raw_ref": {"type": "string"},
+        "raw_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+        "mime_type": {"type": "string"},
+        "bytes": {"type": "integer"}
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "required": ["calibration_ref", "coordinate_frame", "units", "calibration_state"],
+      "properties": {
+        "calibration_ref": {"type": "string"},
+        "coordinate_frame": {"type": "string"},
+        "units": {"type": "string"},
+        "calibration_state": {"type": "string"}
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "required": ["parent_packet_ids", "trace_id", "prov_bundle_id"],
+      "properties": {
+        "parent_packet_ids": {"type": "array", "items": {"type": "string"}},
+        "trace_id": {"type": "string"},
+        "prov_bundle_id": {"type": "string"}
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["review_state", "human_review_required"],
+      "properties": {
+        "review_state": {"type": "string"},
+        "human_review_required": {"type": "boolean"}
+      }
+    }
+  }
+}
